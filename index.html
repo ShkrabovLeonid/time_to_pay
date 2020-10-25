@@ -11,6 +11,7 @@
 <body>
     <main>
         <div class="timeMainBlock">
+            <div class="leftBlock">
             <div id="time">
                 <div class='dayBlock'>
                     <p class='dayTime'>00 :</p>
@@ -39,7 +40,7 @@
                 <div class="loader">
                     <div class="blockLoader"></div>
                     <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="34px" height="34px"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="25px" height="25px"
                         viewBox="0 0 128 128" xml:space="preserve">
                         <g>
                             <path
@@ -70,12 +71,27 @@
                         <p>Ваша зарплата: <span>0</span></p>
                     </div>
                     <div class="payCap">
-                        <p>Уже накапало: <span>0</span></p>
+                        <p>Уже накапало: <span>0</span> за текущий месяц</p>
                     </div>
                 </div>
             </div>
-            <div class="formCalkPay">
-                <input id="inputCalculPay" type="number">
+            </div>
+            <div class="rightBlock">
+                <div class="formCalkPay">
+                    <p>Дата последней выплаты: (<span class="lastPaymentDate">00</span>)</p><input id="inputLastPaymentDate" type="date">
+                </div>
+                <div class="formCalkPay">
+                    <p>Дата плановой выплаты: (<span class="planPaymentDate">00</span>)</p><input id="inputPlanPaymentDate" type="date">
+                </div>
+                <div class="formCalkPay">
+                    <p>Начало робочего дня: (<span class="startWorkingDay">00</span>)</p><input id="inputStartWorkingDay" type="time">
+                </div>
+                <div class="formCalkPay">
+                    <p>Конец робочего дня: (<span class="endWorkingDay">00</span>)</p><input id="inputEndWorkingDay" type="time">
+                </div>
+                <div class="formCalkPay">
+                    <p>Ваша зарплата: (<span class="calculPay">00</span>)</p><input id="inputCalculPay" type="number">
+                </div>
                 <button id="buttonCalculPay">Посчитать</button>
             </div>
         </div>

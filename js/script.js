@@ -1,19 +1,54 @@
 'use strict';
 
-let timeend = new Date(),
-    payday = new Date(2020, 9, 12, 15) / 1000;
-timeend = new Date(2020, 10, 10, 15);
-// Для задания даты с точностью до времени укажите дату в формате:
-// timeend= new Date(ГОД, МЕСЯЦ-1, ДЕНЬ, ЧАСЫ-1, МИНУТЫ);
-let daysBS = (timeend / 1000) - payday;
-let payrollLoading;
+// buttonCalk
+
+
+const rightBlock = document.querySelector("body > main > div > div.rightBlock");
+
+    rightBlock.querySelector("#buttonCalculPay").addEventListener('click', () => {
+        if (rightBlock.querySelector("#inputLastPaymentDate").value) {
+            document.cookie = `lastPaymentDate=${rightBlock.querySelector("#inputLastPaymentDate").value}; path=/`;
+            rightBlock.querySelector(".lastPaymentDate").innerHTML = getCookie('lastPaymentDate');
+        }
+        if (rightBlock.querySelector("#inputPlanPaymentDate").value) {
+            document.cookie = `planPaymentDate=${rightBlock.querySelector("#inputPlanPaymentDate").value}; path=/`;
+            rightBlock.querySelector(".planPaymentDate").innerHTML = getCookie('planPaymentDate');
+        }
+        if (rightBlock.querySelector("#inputStartWorkingDay").value) {
+            document.cookie = `startWorkingDay=${rightBlock.querySelector("#inputStartWorkingDay").value}; path=/`;
+            rightBlock.querySelector(".startWorkingDay").innerHTML = getCookie('startWorkingDay');
+        }
+        if (rightBlock.querySelector("#inputEndWorkingDay").value) {
+            document.cookie = `endWorkingDay=${rightBlock.querySelector("#inputEndWorkingDay").value}; path=/`;
+            rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
+        }
+        if (rightBlock.querySelector("#inputCalculPay").value) {
+            document.cookie = `pay=${rightBlock.querySelector("#inputCalculPay").value}; path=/`;
+            rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
+        }
+        time();
+        calculateSalary();
+});
+
+rightBlock.querySelector(".lastPaymentDate").innerHTML = getCookie('lastPaymentDate');
+rightBlock.querySelector(".planPaymentDate").innerHTML = getCookie('planPaymentDate');
+rightBlock.querySelector(".startWorkingDay").innerHTML = getCookie('startWorkingDay');
+rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
+rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
+
+
 
 function time() {
+    let payday = new Date(`${getCookie('lastPaymentDate')}T15:00:00`) / 1000,
+    timeend = new Date(`${getCookie('planPaymentDate')}T15:00:00`);
+    // Для задания даты с точностью до времени укажите дату в формате:
+    // timeend= new Date(ГОД, МЕСЯЦ-1, ДЕНЬ, ЧАСЫ-1, МИНУТЫ);
+    let daysBS = (timeend / 1000) - payday;
     let today = new Date();
     today = Math.floor((timeend - today));
 
     // payrollLoading
-    payrollLoading = 100 - (100 / (daysBS / (today / 1000)));
+    let payrollLoading = 100 - (100 / (daysBS / (today / 1000)));
     if (payrollLoading > 100) {
         payrollLoading = 'Error !!!';
         document.querySelector(".loader").style.display = 'none';
@@ -61,15 +96,15 @@ function time() {
             switch (true) {
                 case today >= 15:
                     document.querySelector("body").style.backgroundColor = 'black';
-                    timeBlock.children[key].style.color = 'white';
+                    document.querySelector("body").classList.add('white');
                     break;
                 case today < 15 && today >= 0:
                     document.querySelector("body").style.backgroundColor = 'white';
-                    timeBlock.children[key].style.color = 'black';
+                    document.querySelector("body").classList.add('black');
                     break;
                 case today < 0:
                     document.querySelector("body").style.backgroundColor = 'red';
-                    timeBlock.children[key].style.color = 'white';
+                    document.querySelector("body").classList.add('red');
                     break;
             }
         }
@@ -80,16 +115,6 @@ time();
 let intervalTime = setInterval(time, 100);
 
 // calculPay
-
-const inputCalculPay = document.querySelector("#inputCalculPay"),
-    buttonCalculPay = document.querySelector("#buttonCalculPay");
-
-buttonCalculPay.addEventListener('click', () => {
-    if (inputCalculPay.value) {
-        document.cookie = `pay=${inputCalculPay.value}; path=/`;
-        console.log(getCookie('pay'));
-    }
-});
 
 
 function calculateSalary() {
@@ -123,14 +148,17 @@ function calculateSalary() {
         }
     }
 
-    let startDayPay = new Date(year, month, currentDay, 9);
+    let startDayPay = new Date(year, month, currentDay, getCookie('startWorkingDay'));
 
     let earnedForDays = (getCookie('pay') / total) * done,
     earnedForOneDay = getCookie('pay') / total;
     let totalEarned;
 
-    if (hour < 17 && hour >= 9 && day != 6 && day != 0) {
-        let earningsPerHour = (getCookie('pay') / total) / 8;
+
+    let workDayHour = parseInt(getCookie('endWorkingDay')) - parseInt(getCookie('startWorkingDay'));
+
+    if (hour < parseInt(getCookie('endWorkingDay')) && hour >= parseInt(getCookie('startWorkingDay')) && day != 6 && day != 0) {
+        let earningsPerHour = (getCookie('pay') / total) / workDayHour;
         let workingHoursHavePassed = ((d - startDayPay) / 3.6e+6) * earningsPerHour;
 
         let earnADay = (earnedForDays - earnedForOneDay) + workingHoursHavePassed;
@@ -146,7 +174,7 @@ function calculateSalary() {
         currency: 'UAH'
     }).format(totalEarned);
 
-    document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. - месяц | ${earnedForOneDay} грн. - день`;
+    document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. - месяц | ${earnedForOneDay.toFixed(2)} грн. - день`;
     document.querySelector("#time .payCap > p > span").innerHTML = totalEarned;
 
 }
