@@ -30,15 +30,30 @@ const rightBlock = document.querySelector("body > main > div > div.rightBlock");
         calculateSalary();
 });
 
-rightBlock.querySelector(".lastPaymentDate").innerHTML = getCookie('lastPaymentDate');
-rightBlock.querySelector(".planPaymentDate").innerHTML = getCookie('planPaymentDate');
-rightBlock.querySelector(".startWorkingDay").innerHTML = getCookie('startWorkingDay');
-rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
-rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
-
 
 
 function time() {
+    rightBlock.querySelector(".lastPaymentDate").innerHTML = getCookie('lastPaymentDate');
+    rightBlock.querySelector(".planPaymentDate").innerHTML = getCookie('planPaymentDate');
+    rightBlock.querySelector(".startWorkingDay").innerHTML = getCookie('startWorkingDay');
+    rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
+    rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
+    if (getCookie('lastPaymentDate') == undefined) {
+        rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
+    }
+    if (getCookie('planPaymentDate') == undefined) {
+        rightBlock.querySelector(".planPaymentDate").innerHTML = 'Нет данных';
+    }
+    if (getCookie('startWorkingDay') == undefined) {
+        rightBlock.querySelector(".startWorkingDay").innerHTML = 'Нет данных';
+    }
+    if (getCookie('endWorkingDay') == undefined) {
+        rightBlock.querySelector(".endWorkingDay").innerHTML = 'Нет данных';
+    }
+    if (getCookie('pay') == undefined) {
+        rightBlock.querySelector(".calculPay").innerHTML = 'Нет данных';
+    }
+
     let payday = new Date(`${getCookie('lastPaymentDate')}T15:00:00`) / 1000,
     timeend = new Date(`${getCookie('planPaymentDate')}T15:00:00`);
     // Для задания даты с точностью до времени укажите дату в формате:
@@ -46,6 +61,9 @@ function time() {
     let daysBS = (timeend / 1000) - payday;
     let today = new Date();
     today = Math.floor((timeend - today));
+
+    if (today) {
+        
 
     // payrollLoading
     let payrollLoading = 100 - (100 / (daysBS / (today / 1000)));
@@ -88,7 +106,7 @@ function time() {
     time.querySelector(".secTime").innerHTML = `${tsec} :`;
     time.querySelector(".milTime").innerHTML = tmil;
     time.querySelector(".textPayDay > span").innerHTML = payrollLoading;
-
+}
 
     for (let i = 0; i < document.querySelector("#time").children.length; i++) {
         const timeBlock = document.querySelector("#time").children[i];
@@ -148,12 +166,10 @@ function calculateSalary() {
         }
     }
 
-    let startDayPay = new Date(year, month, currentDay, getCookie('startWorkingDay'));
-
+    let startDayPay = new Date(year, month, currentDay, parseInt(getCookie('startWorkingDay')));
     let earnedForDays = (getCookie('pay') / total) * done,
     earnedForOneDay = getCookie('pay') / total;
     let totalEarned;
-
 
     let workDayHour = parseInt(getCookie('endWorkingDay')) - parseInt(getCookie('startWorkingDay'));
 
@@ -173,10 +189,10 @@ function calculateSalary() {
         style: 'currency',
         currency: 'UAH'
     }).format(totalEarned);
-
+if (startDayPay && earnedForDays) {
     document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. - месяц | ${earnedForOneDay.toFixed(2)} грн. - день`;
     document.querySelector("#time .payCap > p > span").innerHTML = totalEarned;
-
+}
 }
 calculateSalary();
 
