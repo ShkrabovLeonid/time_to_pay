@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // buttonCalk
 
@@ -6,29 +6,39 @@
 const rightBlock = document.querySelector("body > main > div > div.rightBlock");
 
     rightBlock.querySelector("#buttonCalculPay").addEventListener('click', () => {
-        if (rightBlock.querySelector("#inputLastPaymentDate").value) {
-            document.cookie = `lastPaymentDate=${rightBlock.querySelector("#inputLastPaymentDate").value}; path=/`;
-            rightBlock.querySelector(".lastPaymentDate").innerHTML = getCookie('lastPaymentDate');
-        }
-        if (rightBlock.querySelector("#inputPlanPaymentDate").value) {
-            document.cookie = `planPaymentDate=${rightBlock.querySelector("#inputPlanPaymentDate").value}; path=/`;
-            rightBlock.querySelector(".planPaymentDate").innerHTML = getCookie('planPaymentDate');
-        }
-        if (rightBlock.querySelector("#inputStartWorkingDay").value) {
-            document.cookie = `startWorkingDay=${rightBlock.querySelector("#inputStartWorkingDay").value}; path=/`;
-            rightBlock.querySelector(".startWorkingDay").innerHTML = getCookie('startWorkingDay');
-        }
-        if (rightBlock.querySelector("#inputEndWorkingDay").value) {
-            document.cookie = `endWorkingDay=${rightBlock.querySelector("#inputEndWorkingDay").value}; path=/`;
-            rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
-        }
-        if (rightBlock.querySelector("#inputCalculPay").value) {
-            document.cookie = `pay=${rightBlock.querySelector("#inputCalculPay").value}; path=/`;
-            rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
-        }
-        time();
-        calculateSalary();
+        fieldValidation();
 });
+    rightBlock.querySelector("#inputCalculPay").addEventListener('keydown', (e) => {
+        if (13 == e.keyCode) {
+            fieldValidation();
+        }
+    });
+
+function fieldValidation() {
+    if (rightBlock.querySelector("#inputLastPaymentDate").value) {
+        document.cookie = `lastPaymentDate=${rightBlock.querySelector("#inputLastPaymentDate").value}; path=/`;
+        rightBlock.querySelector(".lastPaymentDate").innerHTML = getCookie('lastPaymentDate');
+    }
+    if (rightBlock.querySelector("#inputPlanPaymentDate").value) {
+        document.cookie = `planPaymentDate=${rightBlock.querySelector("#inputPlanPaymentDate").value}; path=/`;
+        rightBlock.querySelector(".planPaymentDate").innerHTML = getCookie('planPaymentDate');
+    }
+    if (rightBlock.querySelector("#inputStartWorkingDay").value) {
+        document.cookie = `startWorkingDay=${rightBlock.querySelector("#inputStartWorkingDay").value}; path=/`;
+        rightBlock.querySelector(".startWorkingDay").innerHTML = getCookie('startWorkingDay');
+    }
+    if (rightBlock.querySelector("#inputEndWorkingDay").value) {
+        document.cookie = `endWorkingDay=${rightBlock.querySelector("#inputEndWorkingDay").value}; path=/`;
+        rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
+    }
+    if (rightBlock.querySelector("#inputCalculPay").value) {
+        document.cookie = `pay=${rightBlock.querySelector("#inputCalculPay").value}; path=/`;
+        rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
+    }
+    time();
+    calculateSalary();
+}
+
 
 
 
@@ -39,66 +49,86 @@ function time() {
     rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
     rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
     if (getCookie('lastPaymentDate') == undefined) {
-        rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
+        document.cookie = `lastPaymentDate=2020-12-28; path=/`;
+        // rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('planPaymentDate') == undefined) {
-        rightBlock.querySelector(".planPaymentDate").innerHTML = 'Нет данных';
+        document.cookie = `planPaymentDate=2021-02-10; path=/`;
+        // rightBlock.querySelector(".planPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('startWorkingDay') == undefined) {
-        rightBlock.querySelector(".startWorkingDay").innerHTML = 'Нет данных';
+        document.cookie = `startWorkingDay=09:00; path=/`;
+        // rightBlock.querySelector(".startWorkingDay").innerHTML = 'Нет данных';
     }
     if (getCookie('endWorkingDay') == undefined) {
-        rightBlock.querySelector(".endWorkingDay").innerHTML = 'Нет данных';
+        document.cookie = `endWorkingDay=17:00; path=/`;
+        // rightBlock.querySelector(".endWorkingDay").innerHTML = 'Нет данных';
     }
     if (getCookie('pay') == undefined) {
         rightBlock.querySelector(".calculPay").innerHTML = 'Нет данных';
     }
 
-    let payday = new Date(`${getCookie('lastPaymentDate')}T15:00:00`) / 1000,
-    timeend = new Date(`${getCookie('planPaymentDate')}T15:00:00`);
+    let funSplitData = function (stringData) {
+        let arr = stringData.split(/[- :]/),
+        data = new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+        return data;
+    };
+
+    let payday = funSplitData(`${getCookie('lastPaymentDate')} 12:00:00`) / 1000,
+    timeend = funSplitData(`${getCookie('planPaymentDate')} 15:00:00`);
+
     // Для задания даты с точностью до времени укажите дату в формате:
     // timeend= new Date(ГОД, МЕСЯЦ-1, ДЕНЬ, ЧАСЫ-1, МИНУТЫ);
     let daysBS = (timeend / 1000) - payday;
     let today = new Date();
     today = Math.floor((timeend - today));
-
     if (today) {
         
-
     // payrollLoading
     let payrollLoading = 100 - (100 / (daysBS / (today / 1000)));
-    if (payrollLoading > 100) {
+    if (payrollLoading < 0 || payrollLoading === Infinity || payrollLoading >= 100) {
         payrollLoading = 'Error !!!';
         document.querySelector(".loader").style.display = 'none';
-        document.querySelector(".textPayDay > span").style.opacity = '' + getRandomInt(2) + '';
+        document.querySelector(".textPayDay > span").style.opacity = getRandomInt(2);
     } else {
+        document.querySelector(".textPayDay > span").style.opacity = '1';
         payrollLoading = payrollLoading.toFixed(5) + '%';
+        document.querySelector(".loader").style.display = 'flex';
     }
     // END payrollLoading
 
     let tmil = today % 60;
     today = Math.floor(today / 1000);
-    if (tmil < 10 && tmil >= 0) {
+    if (tmil < 10 && tmil >= 0 & tmil < 0) {
         tmil = '0' + tmil;
     }
     let tsec = today % 60;
     today = Math.floor(today / 60);
-    if (tsec < 10 && tsec >= 0) {
+    if (tsec < 10 && tsec >= 0 && tsec < 0) {
         tsec = '0' + tsec;
     }
     let tmin = today % 60;
     today = Math.floor(today / 60);
-    if (tmin < 10 && tmin >= 0) {
+    if (tmin < 10 && tmin >= 0 && tmin < 0) {
         tmin = '0' + tmin;
     }
     let thour = today % 24;
     today = Math.floor(today / 24);
-    if (thour < 10 && thour >= 0) {
+    if (thour < 10 && thour >= 0 && thour < 0) {
         thour = '0' + thour;
     }
-
+    
     document.querySelector(".blockLoader").style.background = `linear-gradient(to right, #52ad32 ${payrollLoading}, white ${payrollLoading})`;
     const time = document.getElementById('time');
+
+    if (tsec < 0) {
+        today += 1;
+        thour += 1;
+        tsec += 1;
+    }
+    if (tmin < 0) {
+        tmin += 1;
+    }
 
     time.querySelector(".dayTime").innerHTML = `${today} :`;
     time.querySelector(".hourTime").innerHTML = `${thour} :`;
@@ -106,7 +136,6 @@ function time() {
     time.querySelector(".secTime").innerHTML = `${tsec} :`;
     time.querySelector(".milTime").innerHTML = tmil;
     time.querySelector(".textPayDay > span").innerHTML = payrollLoading;
-}
 
     for (let i = 0; i < document.querySelector("#time").children.length; i++) {
         const timeBlock = document.querySelector("#time").children[i];
@@ -115,18 +144,25 @@ function time() {
                 case today >= 15:
                     document.querySelector("body").style.backgroundColor = 'black';
                     document.querySelector("body").classList.add('white');
+                    document.querySelector("body").classList.remove('black');
+                    document.querySelector("body").classList.remove('red');
                     break;
-                case today < 15 && today >= 0:
+                case today < 15 && today >= 0 && tsec > 0:
                     document.querySelector("body").style.backgroundColor = 'white';
                     document.querySelector("body").classList.add('black');
+                    document.querySelector("body").classList.remove('white');
+                    document.querySelector("body").classList.remove('red');
                     break;
-                case today < 0:
+                case today <= 0 && tsec < 0:
                     document.querySelector("body").style.backgroundColor = 'red';
                     document.querySelector("body").classList.add('red');
+                    document.querySelector("body").classList.remove('white');
+                    document.querySelector("body").classList.remove('black');
                     break;
             }
         }
     }
+}
 
 }
 time();
@@ -138,6 +174,10 @@ let intervalTime = setInterval(time, 100);
 function calculateSalary() {
     const holidays = [
         [12, 25], // Католическое Рождество
+        [12, 30], [12, 31], // Выходные в компании
+        [1, 1], // Новый год
+        [1, 4], [1, 5], [1, 6], // Выходные в компании
+        [1, 7], // Старый новый год
 
     ];
 
@@ -180,6 +220,9 @@ function calculateSalary() {
         let earnADay = (earnedForDays - earnedForOneDay) + workingHoursHavePassed;
         totalEarned = earnADay;
         window.setTimeout("calculateSalary()", 100);
+    } else if (hour < parseInt(getCookie('startWorkingDay'))){
+        totalEarned = earnedForDays - earnedForOneDay;
+        window.setTimeout("calculateSalary()", 10000);
     } else {
         totalEarned = earnedForDays;
         window.setTimeout("calculateSalary()", 10000);

@@ -49,6 +49,8 @@ body {
 .milTime {
     font-size: 50px;
     margin: 0;
+    min-width: 80px;
+    text-align: center;
 }
 
 .dayText,
