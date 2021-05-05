@@ -49,11 +49,11 @@ function time() {
     rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
     rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
     if (getCookie('lastPaymentDate') == undefined) {
-        document.cookie = `lastPaymentDate=2020-12-28; path=/`;
+        document.cookie = `lastPaymentDate=2021-04-14; path=/`;
         // rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('planPaymentDate') == undefined) {
-        document.cookie = `planPaymentDate=2021-02-10; path=/`;
+        document.cookie = `planPaymentDate=2021-05-11; path=/`;
         // rightBlock.querySelector(".planPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('startWorkingDay') == undefined) {
@@ -173,11 +173,20 @@ let intervalTime = setInterval(time, 100);
 
 function calculateSalary() {
     const holidays = [
-        [12, 25], // Католическое Рождество
-        [12, 30], [12, 31], // Выходные в компании
+        [12, 27], // Католическое Рождество
         [1, 1], // Новый год
         [1, 4], [1, 5], [1, 6], // Выходные в компании
         [1, 7], // Старый новый год
+        [5, 3], [5, 4], // Майские, Пасха
+        [5, 10], // День победы
+        [6, 21], // Троица
+        [6, 28], // День Конституции
+        [8, 23],
+        [10, 14],
+
+
+
+
 
     ];
 
