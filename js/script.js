@@ -49,7 +49,7 @@ function time() {
     rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
     rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
     if (getCookie('lastPaymentDate') == undefined) {
-        document.cookie = `lastPaymentDate=2021-05-09; path=/`;
+        document.cookie = `lastPaymentDate=2021-05-14; path=/`;
         // rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('planPaymentDate') == undefined) {
