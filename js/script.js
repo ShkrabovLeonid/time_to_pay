@@ -53,7 +53,7 @@ function time() {
         // rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('planPaymentDate') == undefined) {
-        document.cookie = `planPaymentDate=2021-06-10; path=/`;
+        document.cookie = `planPaymentDate=2021-06-11; path=/`;
         // rightBlock.querySelector(".planPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('startWorkingDay') == undefined) {
