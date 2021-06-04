@@ -17,4 +17,4 @@ jobs:
       - run: echo "${{ secrets.key }}" > "$HOME/.ssh/key"
       - run: chmod 600 "$HOME/.ssh/key"
       # Deploy
-      - run: cd dist && rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress . p529063@91.218.229.13:/home/p529063/www/goodday.block.kiev.ua/
+      - run: rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress . p529063@91.218.229.13:/home/p529063/www/goodday.block.kiev.ua/
