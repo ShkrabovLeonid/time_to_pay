@@ -244,7 +244,7 @@ function calculateSalary() {
     }).format(totalEarned);
 if (startDayPay && earnedForDays) {
     document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. | ${currents[0] ? (getCookie('pay') / currents[0].rate).toFixed(2) : 'loading...'} € | ${currents[0] ? (getCookie('pay') / currents[0].rate).toFixed(2) : 'loading...'} $ - месяц <br> ${earnedForOneDay.toFixed(2)} грн. | ${currents[0] ? (earnedForOneDay / currents[0].rate).toFixed(2) : 'loading...'} € | ${currents[1] ? (earnedForOneDay / currents[1].rate).toFixed(2) : 'loading...'} $ - день`;
-    document.querySelector("#time .payCap > p > span").innerHTML = totalEarned + 'test';
+    document.querySelector("#time .payCap > p > span").innerHTML = totalEarned;
 }
 }
 calculateSalary();
