@@ -2,6 +2,7 @@
 
 // buttonCalk
 
+const currents=[];
 
 const rightBlock = document.querySelector("body > main > div > div.rightBlock");
 
@@ -53,7 +54,7 @@ function time() {
         // rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('planPaymentDate') == undefined) {
-        document.cookie = `planPaymentDate=2021-08-10; path=/`;
+        document.cookie = `planPaymentDate=2021-08-12; path=/`;
         // rightBlock.querySelector(".planPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('startWorkingDay') == undefined) {
@@ -61,7 +62,7 @@ function time() {
         // rightBlock.querySelector(".startWorkingDay").innerHTML = 'Нет данных';
     }
     if (getCookie('endWorkingDay') == undefined) {
-        document.cookie = `endWorkingDay=17:00; path=/`;
+        document.cookie = `endWorkingDay=18:00; path=/`;
         // rightBlock.querySelector(".endWorkingDay").innerHTML = 'Нет данных';
     }
     if (getCookie('pay') == undefined) {
@@ -242,13 +243,41 @@ function calculateSalary() {
         currency: 'UAH'
     }).format(totalEarned);
 if (startDayPay && earnedForDays) {
-    document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. - месяц | ${earnedForOneDay.toFixed(2)} грн. - день`;
+    document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. | ${currents[0] ? (getCookie('pay') / currents[0].rate).toFixed(2) : 'loading...'} EUR - месяц | ${earnedForOneDay.toFixed(2)} грн. | ${currents[0] ? (earnedForOneDay / currents[0].rate).toFixed(2) : 'loading...'} EUR - день`;
     document.querySelector("#time .payCap > p > span").innerHTML = totalEarned;
 }
 }
 calculateSalary();
+getCurrent(['EUR', 'USD']);
 
 // function
+/**
+ * Specify the list of required currencies
+ * @param {string[]} nameCurrency
+ */
+async function getCurrent(nameCurrency) {
+    const toDay = getDataDay();
+    const responses = await fetch(setDataURL(toDay));
+    const data = await responses.json();
+    data.forEach(item => {
+        if (nameCurrency.includes(item.cc)) {
+            currents.push({name:item.cc, rate: item.rate});
+        }
+    });
+
+    function getDataDay() {
+        const data = new Date();
+        let year = data.getFullYear(),
+        month = data.getMonth() + 1,
+        day = data.getDate();
+        let dataDay = `${year}${(month >= 10) ? month : "0"+month}${(day >= 10) ? day : "0"+day}`;
+        return dataDay;
+    }
+    function setDataURL(day) {
+        let dataURL = `https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=${day}&json`;
+        return dataURL;
+    }
+}
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
