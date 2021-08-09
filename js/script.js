@@ -243,8 +243,8 @@ function calculateSalary() {
         currency: 'UAH'
     }).format(totalEarned);
 if (startDayPay && earnedForDays) {
-    document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. | ${currents[0] ? (getCookie('pay') / currents[0].rate).toFixed(2) : 'loading...'} EUR - месяц | ${earnedForOneDay.toFixed(2)} грн. | ${currents[0] ? (earnedForOneDay / currents[0].rate).toFixed(2) : 'loading...'} EUR - день`;
-    document.querySelector("#time .payCap > p > span").innerHTML = totalEarned;
+    document.querySelector("#time .yourPay > p > span").innerHTML = `${getCookie('pay')} грн. | ${currents[0] ? (getCookie('pay') / currents[0].rate).toFixed(2) : 'loading...'} € | ${currents[0] ? (getCookie('pay') / currents[0].rate).toFixed(2) : 'loading...'} $ - месяц | ${earnedForOneDay.toFixed(2)} грн. | ${currents[0] ? (earnedForOneDay / currents[0].rate).toFixed(2) : 'loading...'} € | ${currents[1] ? (earnedForOneDay / currents[1].rate).toFixed(2) : 'loading...'} $ - день`;
+    document.querySelector("#time .payCap > p > span").innerHTML = totalEarned + 'test';
 }
 }
 calculateSalary();
