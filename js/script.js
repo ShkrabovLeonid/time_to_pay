@@ -50,11 +50,11 @@ function time() {
     rightBlock.querySelector(".endWorkingDay").innerHTML = getCookie('endWorkingDay');
     rightBlock.querySelector(".calculPay").innerHTML = getCookie('pay');
     if (getCookie('lastPaymentDate') == undefined) {
-        document.cookie = `lastPaymentDate=2022-01-14; path=/`;
+        document.cookie = `lastPaymentDate=2022-02-16; path=/`;
         // rightBlock.querySelector(".lastPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('planPaymentDate') == undefined) {
-        document.cookie = `planPaymentDate=2022-02-10; path=/`;
+        document.cookie = `planPaymentDate=2022-03-10; path=/`;
         // rightBlock.querySelector(".planPaymentDate").innerHTML = 'Нет данных';
     }
     if (getCookie('startWorkingDay') == undefined) {
